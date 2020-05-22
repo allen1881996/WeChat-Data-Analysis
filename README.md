@@ -86,18 +86,17 @@ print(key)
 - m_nsRemarkPYFullShort: 好友备注拼音缩写
 - m_ui_Sex: 好友性别 (1为男，2为女)
 - m_nsAliasName: 微信号
-- m_nsEncodeUserName:  
 
 找到特定好友的MD5编码，只需要执行一个简单query:
 
-```
-SELECT m_nsUsrName,
-       nickname,
-       m_nsRemark
-       FROM WCContact
+```sql
+# 根据微信号获取User Name
+SELECT m_nsUsrName AS UserName
+FROM WCContact       
 WHERE m_nsAliasName = '<好友的微信号>'
 ```
-将得到的`m_nsUsrName`进行M5编码，可以使用Python的hashlib库进行编码，或者直接百度M5编码找一些在线网站。
+
+将得到的`m_nsUsrName`进行M5编码，可以使用Python的hashlib库进行编码，或者直接百度M5编码找一些[在线网站](https://www.md5hashgenerator.com/)。
 
 ```Python
 import hashlib 
