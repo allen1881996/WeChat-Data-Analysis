@@ -1,6 +1,5 @@
 # WeChat-Data-Analysis
 
-
 ### 介绍
 ### 使用工具
 - MacBook 10.15 Catalina (预先安装电脑版微信)
@@ -8,7 +7,7 @@
 - Python 3.8 [(下载)](https://www.python.org/downloads/)
 - DB Browser [(下载)](https://sqlitebrowser.org/dl/)
 
-## 1.微信聊天记录备份与导出
+## 1. 微信聊天记录备份与导出
 MAC更新Catalina后取消了iTunes, 同步iphone数据需要用数据线连接iPhone和MacBook。打开访达，选择位置/iPhone，立即备份，具体操作如下图所示。
 
 <div align=center><img width="800" height="400" src="https://github.com/allen1881996/WeChat-Data-Analysis/blob/master/pics/iphone%E5%90%8C%E6%AD%A5.png"/></div>
@@ -73,7 +72,46 @@ print(key)
 
 ### 1.3 查找与指定好友聊天数据
 
-## 2.数据分析
+根据前面的分析已经知道，每一个Table Name中的ID代表的就是聊天对象（人/群/讨论组）。这个ID是通过MD5编码得到的。在聊天记录文件的上一级目录可以找到Contact文件夹，这个文件夹中存储的数据库是我们微信号中的好友信息，在我的电脑中这个文件的名字是`wccontact_new2.db`。
+
+用DB Browser打开这个数据库文件，密钥和之前获得的相同。得到的数据库如下图所示（隐藏了敏感信息）：
+
+<div align=center><img width="800" height="460" src="https://github.com/allen1881996/WeChat-Data-Analysis/blob/master/pics/%E5%A5%BD%E5%8F%8B%E4%BF%A1%E6%81%AF.jpeg"/></div>
+
+- m_nsUsrName: MD5加密前的ID（gh表示公众号，wxid表示，qq表示）
+- nickname: 好友昵称
+- m_nsFullPY: 好友昵称拼音
+- m_nsRemark: 好友备注
+- m_nsRemarkPYFull: 好友备注拼音
+- m_nsRemarkPYFullShort: 好友备注拼音缩写
+- m_ui_Sex: 好友性别 (1为男，2为女)
+- m_nsAliasName: 微信号
+- m_nsEncodeUserName:  
+
+找到特定好友的MD5编码，只需要执行一个简单query:
+
+```
+SELECT m_nsUsrName,
+       nickname,
+       m_nsRemark
+       FROM WCContact
+WHERE m_nsAliasName = '<好友的微信号>'
+```
+将得到的`m_nsUsrName`进行M5编码，可以使用Python的hashlib库进行编码，或者直接百度M5编码找一些在线网站。
+
+```Python
+import hashlib 
+
+str2hash = "<m_nsUsrName>"
+  
+
+result = hashlib.md5(str2hash.encode()) 
+  
+print("The hexadecimal equivalent of hash is : ", end ="") 
+print(result.hexdigest()) 
+```
+
+## 2. 数据分析
 
 ### 参考资源
 1. [土办法导出 Mac 版微信聊天记录](https://www.v2ex.com/t/466053)
