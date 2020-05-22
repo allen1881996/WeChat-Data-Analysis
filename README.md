@@ -10,6 +10,7 @@
 ## 微信聊天记录备份与导出
 MAC更新Catalina后取消了iTunes, 同步iphone数据需要用数据线连接iPhone和MacBook。打开访达，选择位置/iPhone，立即备份，具体操作如下图所示。
 <div align=center><img width="800" height="400" src="https://github.com/allen1881996/WeChat-Data-Analysis/blob/master/pics/iphone%E5%90%8C%E6%AD%A5.png"/></div>
+
 成功完成同步后，微信数据实际被储存在了加密的*.db文件中，也就是SQLite数据库文件。打开Terminal运行以下代码可以查看这些*.db文件。
 
 `ls -alh ~/Library/Containers/com.tencent.xinWeChat/Data/Library/Application\ Support/com.tencent.xinWeChat/*/*/Message/*.db`
@@ -18,7 +19,13 @@ MAC更新Catalina后取消了iTunes, 同步iphone数据需要用数据线连接i
 
 `/Users/<User Name>/Library/Containers/com.tencent.xinWeChat/Data/Library/Application Support/com.tencent.xinWeChat/2.0b4.0.9/16671fd108bc2258e3dad6d83f7e75fb/Message/msg_0.db`
 
-### 获取密钥
+### 获取微信数据库密钥
+1. 打开电脑端微信（不要登陆）
+2. 在Terminal输入命令`lldb -p $(pgrep WeChat)`
+3. 输入`br set -n sqlite3_key`，回车
+4. 输入`c`，回车
+5. 手机扫码登陆电脑端微信
+6. 输入`memory read --size 1 --format x --count 32 $rsi`，回车
 
 ```python
 ori_key = """
@@ -31,4 +38,29 @@ ori_key = """
 key = '0x' + ''.join(i.partition(':')[2].replace('0x', '').replace(' ', '') for i in ori_key.split('\n')[1:5])
 print(key)
 ```
+
+### 查看数据库
+打开DB Brower，按照下图所示选择raw key和加密设置，将上个部分得到的数据库密钥粘贴到密码位置。
+
+<div align=center><img width="800" height="460" src="https://github.com/allen1881996/WeChat-Data-Analysis/blob/master/pics/%E6%89%93%E5%BC%80%E6%95%B0%E6%8D%AE%E5%BA%93.png"/></div>
+
+打开数据库文件后，数据库结构如下图所示。
+
+<div align=center><img width="800" height="460" src="https://github.com/allen1881996/WeChat-Data-Analysis/blob/master/pics/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%BB%93%E6%9E%84.png"/></div>
+
+每一个Table代表你与一个人/群的聊天记录。
+- mesLocalID：primary key，
+- mesMesSvrID：服务端消息ID，
+- msgCreateTime：消息创建时间
+- msgContent：消息内容（格式为普通文本或XML）
+- msgStatus：消息状态（3表示我发送出去的消息，4表示我收到的消息）
+- msgImgStatus：图片状态
+- messgaeType：消息类型（1表示普通文本，3表示图片，34表示语音，43表示视频，49是转发自其他APP的信息）
+- mesDes：
+- msgSource：消息来源（当消息为我发送出去的消息时为空值）
+- msgSeq：
+
+
+
+### 参考资源
 1. [土办法导出 Mac 版微信聊天记录](https://www.v2ex.com/t/466053)
