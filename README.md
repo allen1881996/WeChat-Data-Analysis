@@ -1,5 +1,6 @@
 # WeChat-Data-Analysis
 
+
 ### 介绍
 ### 使用工具
 - MacBook 10.15 Catalina (预先安装电脑版微信)
@@ -7,7 +8,7 @@
 - Python 3.8 [(下载)](https://www.python.org/downloads/)
 - DB Browser [(下载)](https://sqlitebrowser.org/dl/)
 
-## 微信聊天记录备份与导出
+## 1.微信聊天记录备份与导出
 MAC更新Catalina后取消了iTunes, 同步iphone数据需要用数据线连接iPhone和MacBook。打开访达，选择位置/iPhone，立即备份，具体操作如下图所示。
 
 <div align=center><img width="800" height="400" src="https://github.com/allen1881996/WeChat-Data-Analysis/blob/master/pics/iphone%E5%90%8C%E6%AD%A5.png"/></div>
@@ -20,7 +21,7 @@ MAC更新Catalina后取消了iTunes, 同步iphone数据需要用数据线连接i
 
 `/Users/<User Name>/Library/Containers/com.tencent.xinWeChat/Data/Library/Application Support/com.tencent.xinWeChat/2.0b4.0.9/16671fd108bc2258e3dad6d83f7e75fb/Message/msg_0.db`
 
-### 获取微信数据库密钥
+### 1.1 获取微信数据库密钥
 
 1. 打开电脑端微信（不要登陆）
 2. 在Terminal输入命令`lldb -p $(pgrep WeChat)`
@@ -49,7 +50,7 @@ print(key)
 
 这串密钥对于后续所有*.db文件是通用的。
 
-### 查看数据库
+### 1.2 查看数据库
 
 打开DB Brower，按照下图所示选择raw key和加密设置，将上个部分得到的数据库密钥粘贴到密码位置。
 
@@ -59,7 +60,6 @@ print(key)
 
 <div align=center><img width="800" height="460" src="https://github.com/allen1881996/WeChat-Data-Analysis/blob/master/pics/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%BB%93%E6%9E%84.png"/></div>
 
-#### 
 每一个Table代表你与一个人/群的聊天记录。
 
 - mesLocalID：primary key，
@@ -71,7 +71,9 @@ print(key)
 - messgaeType：消息类型（1表示普通文本，3表示图片，34表示语音，43表示视频，47表示表情包，48表示位置，49是分享消息）
 - msgSource：消息来源（仅针对收到的消息）
 
+### 1.3 查找与指定好友聊天数据
 
+## 2.数据分析
 
 ### 参考资源
 1. [土办法导出 Mac 版微信聊天记录](https://www.v2ex.com/t/466053)
