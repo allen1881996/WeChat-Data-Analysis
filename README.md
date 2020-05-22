@@ -11,11 +11,14 @@
 MAC更新Catalina后取消了iTunes, 同步iphone数据需要用数据线连接iPhone和MacBook。打开访达，选择位置/iPhone，立即备份，具体操作如下图所示。
 <div align=center><img width="800" height="400" src="https://github.com/allen1881996/WeChat-Data-Analysis/blob/master/pics/iphone%E5%90%8C%E6%AD%A5.png"/></div>
 成功完成同步后，微信数据实际被储存在了加密的*.db文件中，也就是SQLite数据库文件。打开Terminal运行以下代码可以查看这些*.db文件。
+
 `ls -alh ~/Library/Containers/com.tencent.xinWeChat/Data/Library/Application\ Support/com.tencent.xinWeChat/*/*/Message/*.db`
+
 以其中一个文件地址为例，其格式如下:
+
 `/Users/<User Name>/Library/Containers/com.tencent.xinWeChat/Data/Library/Application Support/com.tencent.xinWeChat/2.0b4.0.9/16671fd108bc2258e3dad6d83f7e75fb/Message/msg_0.db`
 
-### 获取
+### 获取密钥
 
 ```python
 ori_key = """
