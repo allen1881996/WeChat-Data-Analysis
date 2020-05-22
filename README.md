@@ -63,7 +63,7 @@ print(key)
 
 - mesLocalID：primary key，
 - mesMesSvrID：服务端消息ID，
-- msgCreateTime：消息创建时间（UTC+0）
+- msgCreateTime：消息创建时间（Unix time）
 - msgContent：消息内容（格式为普通文本或XML）
 - msgStatus：消息状态（3表示发送出去的消息，4表示收到的消息）
 - msgImgStatus：图片状态
