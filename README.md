@@ -22,14 +22,15 @@ MAC更新Catalina后取消了iTunes, 同步iphone数据需要用数据线连接i
 
 ### 1.1 获取微信数据库密钥
 
-1. 打开电脑端微信（不要登陆）
-2. 在Terminal输入命令`lldb -p $(pgrep WeChat)`
-3. 输入`br set -n sqlite3_key`，回车
-4. 输入`c`，回车
-5. 手机扫码登陆电脑端微信
-6. 这时候电脑端微信是会卡在登陆界面的，不需要担心，回到Terminal
-7. 输入`memory read --size 1 --format x --count 32 $rsi`，回车
-8. 将返回的原始key粘贴到下面的字符串中，用这段Python代码获得密钥
+1. 如果你的 Mac 启用了 SIP (System Integrity Protection)，请禁用它（[Disabling and Enabling System Integrity Protection](https://developer.apple.com/documentation/security/disabling_and_enabling_system_integrity_protection)）。你必须禁用SIP否则你无法使用`lldb`来获取微信的密钥。
+2. 打开电脑端微信（不要登陆）
+3. 在Terminal输入命令`lldb -p $(pgrep WeChat)`
+4. 输入`br set -n sqlite3_key`，回车
+5. 输入`c`，回车
+6. 手机扫码登陆电脑端微信
+7. 这时候电脑端微信是会卡在登陆界面的，不需要担心，回到Terminal
+8. 输入`memory read --size 1 --format x --count 32 $rsi`，回车（如果你使用的是搭载 Apple Silicon 的 Mac，请使用 ARM64 汇编的`$x1` Register 而不是`$rsi`）
+9. 将返回的原始key粘贴到下面的字符串中，用这段Python代码获得密钥
 
 ```python
 ori_key = """
